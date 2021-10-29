@@ -39,6 +39,23 @@ const main = async () => {
 
 
 
+        //Get Singel Package Data
+        app.get('/packagedata/:pkg', async (req, res) => {
+            const pkg = req.params.pkg
+            const pkgId = { _id: ObjectId(pkg) }
+            const result = await tourPackagesCollection.findOne(pkgId)
+            res.send(result)
+        })
+
+        //Post Booking
+        app.post('/newbooking', async (req, res) => {
+            const bookingData = req.body
+            const result = await tourBookingCollection.insertOne(bookingData)
+            res.send(result)
+        })
+
+
+
 
 
     }
