@@ -18,8 +18,9 @@ const main = async () => {
     try {
         await client.connect();
         const database = client.db("travelAnts");
-        const tourPackagesCollection = database.collection("tourPackages");
-        const tourBookingCollection = database.collection("tourBooking");
+        const tourPackagesCollection = database.collection("packages");
+        const tourBookingCollection = database.collection("bookings");
+        const blogsCollection = database.collection("blogs");
 
         //Post Package
         app.post('/addtourpackage', async (req, res) => {
@@ -54,11 +55,75 @@ const main = async () => {
             res.send(result)
         })
 
+        //Get Packages
+        app.get('/mybookings', async (req, res) => {
+            let ressult;
+            if (req.query.search) {
+                const user = req.query.search
+                const userEmail = { email: user }
+                const userBookings = tourBookingCollection.find(userEmail)
+                result = await userBookings.toArray()
+            }
+            else {
+                const bookings = tourBookingCollection.find({})
+                result = await bookings.toArray()
+            }
 
+            res.send(result)
+        })
 
+        //Chnage Status of Booking 
+        app.put('/changestatus/:bkid', async (req, res) => {
+            const bkId = req.params.bkid
+            const bookingId = { _id: ObjectId(bkId) }
+            const updateStatus = {
+                $set: {
+                    status: "approved"
+                },
+            };
+            const result = await tourBookingCollection.updateOne(bookingId, updateStatus)
+            res.send(result)
+        })
 
+        //Delete Booking 
+        app.delete('/deletebooking/:bkid', async (req, res) => {
+            const bkId = req.params.bkid
+            console.log(bkId)
+            const bookingId = { _id: ObjectId(bkId) }
+            const result = await tourBookingCollection.deleteOne(bookingId)
+            res.send(result)
+        })
+
+        //Post Package
+        app.post('/addblog', async (req, res) => {
+            const blogData = req.body
+            const result = await blogsCollection.insertOne(blogData)
+            res.send(result)
+        })
+
+        //Get Blogs
+        app.get('/showblogs', async (req, res) => {
+            //http://localhost:5000/showblogs?find
+
+            let ressult;
+
+            if (req.query.find) {
+                const bgid = req.query.find
+                const blogId = { _id: ObjectId(bgid) }
+                result = await blogsCollection.findOne(blogId)
+            } else if (req.query.type) {
+                const bookings = blogsCollection.find({})
+                result = await bookings.limit(6).toArray()
+            } else {
+                const bookings = blogsCollection.find({})
+                result = await bookings.toArray()
+            }
+
+            res.send(result)
+        })
 
     }
+
     finally {
 
     }
