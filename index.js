@@ -17,11 +17,23 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 const main = async () => {
     try {
         await client.connect();
-        // const database = client.db("volnetDb");
-        // const eventsCollection = database.collection("eventsColl");
-        // const volRegCollection = database.collection("volRegColl");
-        console.log('connected')
+        const database = client.db("travelAnts");
+        const tourPackagesCollection = database.collection("tourPackages");
+        const tourBookingCollection = database.collection("tourBooking");
 
+        //Post Package
+        app.post('/addtourpackage', async (req, res) => {
+            const packageData = req.body
+            const result = await tourPackagesCollection.insertOne(packageData)
+            res.send(result)
+        })
+
+        //Get Packages
+        app.get('/showpackages', async (req, res) => {
+            const packageData = tourPackagesCollection.find({})
+            const result = await packageData.toArray()
+            res.send(result)
+        })
 
 
 
