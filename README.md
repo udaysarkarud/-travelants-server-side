@@ -1,10 +1,9 @@
 # Project : TravelAnts
-
 Please check the live site: [Click here](https://assignment-11-travelants.web.app).
 
 ## About Project
 
-This is and travel agect application. you can using this application to book too many travel packages. You can easily manage all of your booking. If you want your can read and get knowedge from reading blogs.
+(This is Backend Repository.) This is an travel agect application. you can using this application to book too many travel packages. You can easily manage all of your booking. If you want your can read and get knowedge from reading blogs.
 
 ## Teach Used
 Frontend:  ReactJs, React Router, Firebase, React Hook Form, Bootstrap, sweetalert  
