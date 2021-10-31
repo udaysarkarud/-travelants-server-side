@@ -33,8 +33,19 @@ const main = async () => {
 
         //Get Packages
         app.get('/showpackages', async (req, res) => {
-            const packageData = tourPackagesCollection.find({})
-            const result = await packageData.toArray()
+            let ressult;
+
+            if (req.query.find) {
+                const pkg = req.query.find
+                const pkgId = { _id: ObjectId(pkg) }
+                result = await tourPackagesCollection.findOne(pkgId)
+            } else if (req.query.type) {
+                const packageData = tourPackagesCollection.find({}).sort({ _id: -1 })
+                result = await packageData.limit(6).toArray()
+            } else {
+                const packageData = tourPackagesCollection.find({}).sort({ _id: -1 })
+                result = await packageData.toArray()
+            }
             res.send(result)
         })
 
@@ -113,7 +124,7 @@ const main = async () => {
                 result = await blogsCollection.findOne(blogId)
             } else if (req.query.type) {
                 const bookings = blogsCollection.find({})
-                result = await bookings.limit(6).toArray()
+                result = await bookings.limit(4).toArray()
             } else {
                 const bookings = blogsCollection.find({})
                 result = await bookings.toArray()
